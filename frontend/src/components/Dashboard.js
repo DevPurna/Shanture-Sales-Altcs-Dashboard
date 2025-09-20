@@ -22,7 +22,7 @@ import {
 import "./Dashboard.css";
 
 // connect socket to deployed backend
-const socket = io("https://shanture-sales-altcs-dashboard.onrender.com");
+const socket = io("https://shanture-sales-altcs-dashboard.onrender.com/");
 
 const Dashboard = () => {
   const [startDate, setStartDate] = useState(new Date("2024-01-01"));
