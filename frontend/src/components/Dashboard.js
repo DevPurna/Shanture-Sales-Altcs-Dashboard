@@ -21,8 +21,8 @@ import {
 } from "../services/api";
 import "./Dashboard.css";
 
-// connect socket to backend
-const socket = io("http://localhost:5000"); // change to your backend URL
+// connect socket to deployed backend
+const socket = io("https://shanture-sales-altcs-dashboard.onrender.com");
 
 const Dashboard = () => {
   const [startDate, setStartDate] = useState(new Date("2024-01-01"));
@@ -77,8 +77,8 @@ const Dashboard = () => {
             p.productId === sale.productId
               ? {
                   ...p,
-                  totalRevenue: p.totalRevenue + sale.totalRevenue,
-                  totalQuantity: (p.totalQuantity || 0) + sale.quantity,
+                  totalRevenue: (p.totalRevenue || 0) + (sale.totalRevenue || 0),
+                  totalQuantity: (p.totalQuantity || 0) + (sale.quantity || 0),
                 }
               : p
           );
@@ -88,8 +88,8 @@ const Dashboard = () => {
             {
               productId: sale.productId,
               productName: sale.productName || "Unknown",
-              totalRevenue: sale.totalRevenue,
-              totalQuantity: sale.quantity,
+              totalRevenue: sale.totalRevenue || 0,
+              totalQuantity: sale.quantity || 0,
             },
           ];
         }
@@ -101,7 +101,7 @@ const Dashboard = () => {
         if (existing) {
           return prev.map((c) =>
             c.customerId === sale.customerId
-              ? { ...c, totalRevenue: c.totalRevenue + sale.totalRevenue }
+              ? { ...c, totalRevenue: (c.totalRevenue || 0) + (sale.totalRevenue || 0) }
               : c
           );
         } else {
@@ -110,7 +110,7 @@ const Dashboard = () => {
             {
               customerId: sale.customerId,
               customerName: sale.customerName || "New Customer",
-              totalRevenue: sale.totalRevenue,
+              totalRevenue: sale.totalRevenue || 0,
             },
           ];
         }
@@ -122,7 +122,7 @@ const Dashboard = () => {
         if (existing) {
           return prev.map((r) =>
             r.region === sale.region
-              ? { ...r, totalRevenue: r.totalRevenue + sale.totalRevenue }
+              ? { ...r, totalRevenue: (r.totalRevenue || 0) + (sale.totalRevenue || 0) }
               : r
           );
         } else {
@@ -130,7 +130,7 @@ const Dashboard = () => {
             ...prev,
             {
               region: sale.region || "Unknown",
-              totalRevenue: sale.totalRevenue,
+              totalRevenue: sale.totalRevenue || 0,
             },
           ];
         }
@@ -141,8 +141,8 @@ const Dashboard = () => {
         ...prev,
         {
           reportDate: new Date(),
-          totalRevenue: sale.totalRevenue,
-          avgOrderValue: sale.totalRevenue / sale.quantity,
+          totalRevenue: sale.totalRevenue || 0,
+          avgOrderValue: sale.quantity ? (sale.totalRevenue || 0) / sale.quantity : 0,
         },
       ]);
     });
